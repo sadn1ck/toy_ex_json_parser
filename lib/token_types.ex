@@ -29,3 +29,19 @@ defmodule Token do
     end
   end
 end
+
+defmodule ASTNode do
+  defstruct [:type, :value]
+
+  def new(type, value) do
+    case {type, value} do
+      {"Object", val} -> %ASTNode{type: "Object", value: val}
+      {"Array", val} -> %ASTNode{type: "Array", value: val}
+      {"String", val} -> %ASTNode{type: "String", value: val}
+      {"Number", val} -> %ASTNode{type: "Number", value: val}
+      {"Boolean", val} -> %ASTNode{type: "Boolean", value: val}
+      {"Null", ""} -> %ASTNode{type: "Null"}
+      {_, _} -> raise ArgumentError, "Invalid ASTNode type: #{inspect(type)}"
+    end
+  end
+end

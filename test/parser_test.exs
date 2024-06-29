@@ -87,4 +87,20 @@ defmodule ParserTest do
       Parser.parse(Tokenizer.tokenize(input))
     end
   end
+
+  test "should throw RuntimeError on duplicate keys" do
+    input = ~s({"sample": "json", "sample": "json"})
+
+    assert_raise RuntimeError, fn ->
+      Parser.parse(Tokenizer.tokenize(input))
+    end
+  end
+
+  test "should throw RuntimeError on nest level duplicate keys" do
+    input = ~s({"depth0": {"sample": "json", "sample": "json"}})
+
+    assert_raise RuntimeError, fn ->
+      Parser.parse(Tokenizer.tokenize(input))
+    end
+  end
 end

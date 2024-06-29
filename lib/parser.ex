@@ -54,6 +54,10 @@ defmodule Parser do
     with {%Token{type: :string, value: strval}, after_string} <- consume(tokens),
          {%Token{type: :colon}, after_colon} <- consume(after_string),
          {value, rest} <- parse(after_colon) do
+      if Map.has_key?(acc.value, strval) do
+        raise RuntimeError, "Duplicate key '#{strval}' found in object"
+      end
+
       case consume(rest) do
         {%Token{type: :comma}, after_comma} ->
           parse_object(after_comma, %{acc | value: Map.put(acc.value, strval, value)})
